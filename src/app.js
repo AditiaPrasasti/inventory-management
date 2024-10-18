@@ -4,6 +4,8 @@ const app = express();
 
 const dotenv = require("dotenv");
 
+const adminAuthorization = require("./middleware/adminAuthorization");
+
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -28,7 +30,7 @@ app.use("/api/auth", authController);
 
 app.use("/api/items", itemController);
 
-app.use("/api/users", userController);
+app.use("/api/users", adminAuthorization, userController);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ` + PORT);
