@@ -6,11 +6,12 @@ router.post("/register", async (req, res, next) => {
   const { username, email, password } = req.body;
   try {
     const newUser = await authService.register(username, email, password);
-
-    res.status(201).json({
-      data: { username: newUser.username, email: newUser.email },
-      message: "Registration Success!",
-    });
+    res
+      .status(201)
+      .json({
+        data: { username: newUser.username, email: newUser.email },
+        message: "Registration success",
+      });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -23,8 +24,8 @@ router.post("/login", async (req, res, next) => {
     res
       .status(200)
       .json({
-        data: { username: user.username, token },
-        message: "Login Success!",
+        data: { username: user.username, role: user.role, token },
+        message: "Login success!",
       });
   } catch (error) {
     res.status(400).json({ error: error.message });

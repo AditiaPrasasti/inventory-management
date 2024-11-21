@@ -4,17 +4,20 @@ const app = express();
 
 const dotenv = require("dotenv");
 
+dotenv.config();
+
 const adminAuthorization = require("./middleware/adminAuthorization");
 
-dotenv.config();
+const cors = require("cors");
 
 const PORT = process.env.PORT;
 
 app.use(express.json());
+app.use(cors());
 
-app.get("/", (req, res) => {
+app.get("/", (req, res) => {  
   res.send("Hello there!");
-});
+}); 
 
 const authController = require("./auth/auth.controller");
 

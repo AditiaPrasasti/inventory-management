@@ -5,15 +5,11 @@ async function createTransaction(userId, itemId, quantityBorrowed) {
     const newTransaction = await prisma.transaction.create({
       data: {
         userId,
-
         itemId,
-
         quantityBorrowed,
-
         status: "PENDING",
       },
     });
-
     return newTransaction;
   } catch (error) {
     throw new Error("Failed to create transaction");
@@ -31,10 +27,9 @@ async function findTransactions() {
         },
       },
     });
-
     return transactions;
   } catch (error) {
-    throw new Error("Failed to fetch transactions");
+    throw new Error("Failed to fetch transaction");
   }
 }
 
@@ -44,7 +39,6 @@ async function findTransactionsByUserId(userId) {
       where: {
         userId: parseInt(userId),
       },
-
       include: {
         item: {
           select: {
@@ -53,10 +47,9 @@ async function findTransactionsByUserId(userId) {
         },
       },
     });
-
     return transactions;
   } catch (error) {
-    throw new Error("Failed to fetch transactions by user ID");
+    throw new Error("Failed to fetch transaction by User Id");
   }
 }
 
@@ -66,20 +59,22 @@ async function findTransactionById(id) {
       id: parseInt(id),
     },
   });
-
   return transaction;
 }
 
-async function updateTransactionStatus(transactionId, status) {
+async function updateTransactionStatus(transactionId, status, timeStampField) {
   try {
+    const updateData = { status };
+
+    if (timeStampField) {
+      updateData[timeStampField] = new Date();
+    }
+
     await prisma.transaction.update({
       where: {
         id: parseInt(transactionId),
       },
-
-      data: {
-        status,
-      },
+      data: updateData,
     });
   } catch (error) {
     throw new Error("Failed to update transaction status");
@@ -88,12 +83,8 @@ async function updateTransactionStatus(transactionId, status) {
 
 module.exports = {
   createTransaction,
-
   findTransactions,
-
   findTransactionsByUserId,
-
   findTransactionById,
-
   updateTransactionStatus,
 };
